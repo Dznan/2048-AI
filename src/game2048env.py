@@ -122,24 +122,23 @@ class Game2048Env:
                         break
         return new_state, reward
 
-
     @staticmethod
     def do_action(state, direction):
         if direction == 'RIGHT':
-            return do_right_action(state)
+            return Game2048Env.do_right_action(state)
         if direction == 'LEFT':
-            return do_left_action(state)
+            return Game2048Env.do_left_action(state)
         if direction == 'UP':
-            return do_up_action(state)
+            return Game2048Env.do_up_action(state)
         if direction == 'DOWN':
-            return do_down_action(state)
+            return Game2048Env.do_down_action(state)
 
     @property
     def action_space(self):
         actions = []
         if self.turn == 'MOVE':
             for d in ['RIGHT', 'LEFT', 'UP', 'DOWN']:
-                new_state, _ = do_action(self.state, d)
+                new_state, _ = self.do_action(self.state, d)
                 if np.any(new_state != self.state):
                     actions.append(d)
         elif self.turn == 'ADD_TILE':
@@ -158,7 +157,7 @@ class Game2048Env:
     def step(self, action):
         reward = 0
         if self.turn == 'MOVE':
-            self.state, reward = do_action(self.state, action)
+            self.state, reward = self.do_action(self.state, action)
             self.score += reward
             self.turn = 'ADD_TILE'
         elif self.turn == 'ADD_TILE':
