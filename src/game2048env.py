@@ -9,13 +9,15 @@ class Game2048Env:
         self.turn = 'MOVE'
     
     def init(self, state=None):
-        if state is not None:
+        self.score = 0
+        self.turn = 'MOVE'
+        if state is not None and np.all(state != 0):
             self.state = state
         else:
             self.state = np.zeros((4, 4), dtype=np.int)
             for i in range(2):
                 self.add_random_tile()
-    
+
     def get_available_tiles(self):
         tiles = []
         view_state = self.state.reshape(-1)
@@ -150,7 +152,7 @@ class Game2048Env:
     
     def is_terminal(self):
         actions = self.action_space
-        if len(actions) == 0 and self.turn == 'MOVE':
+        if len(actions) == 0:
             return True
         return False
 
@@ -164,7 +166,8 @@ class Game2048Env:
             n, tile = action
             self.add_tile(n, *tile)
             self.turn = 'MOVE'
-        return self.state, reward, self.score
+        done = self.is_terminal()
+        return self.state, done, reward, self.score
 
     def reset(self):
         self.init()

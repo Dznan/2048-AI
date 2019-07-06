@@ -28,10 +28,6 @@ def main(argv):
     env.step(env.action_space[0])
 
     print(env.state)
-    print(env.do_right_action(env.state))
-    print(env.do_left_action(env.state))
-    print(env.do_up_action(env.state))
-    print(env.do_down_action(env.state))
     print(env.action_space)
 
     env.step(env.action_space[0])
