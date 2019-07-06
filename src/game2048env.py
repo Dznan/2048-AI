@@ -44,6 +44,7 @@ class Game2048Env:
         height, width = state.shape
         new_state = state.copy()
         for i in range(height):
+            #move part
             for j in range(width - 1, -1, -1):
                 if new_state[i, j] == 0:
                     for k in range(j - 1, -1, -1):
@@ -51,13 +52,21 @@ class Game2048Env:
                             new_state[i, j] = new_state[i, k]
                             new_state[i, k] = 0
                             break
-
-                for k in range(j - 1, -1, -1):
-                    if new_state[i, k] != 0 and new_state[i, k] == new_state[i, j]:
-                        new_state[i, j] <<= 1
-                        new_state[i, k] = 0
-                        reward += new_state[i, j]
-                        break
+            #merge part
+            for j in range(width-1, 0, -1):
+                if new_state[i, j] == 0:continue
+                if  new_state[i, j] == new_state[i, j-1]:
+                    new_state[i, j] <<= 1
+                    new_state[i, j-1] = 0
+                    reward += new_state[i, j]
+            #move part
+            for j in range(width - 1, 0, -1):
+                if new_state[i, j] == 0:
+                    for k in range(j - 1, -1, -1):
+                        if new_state[i, k] != 0:
+                            new_state[i, j] = new_state[i, k]
+                            new_state[i, k] = 0
+                            break 
         return new_state, reward
 
     @staticmethod
@@ -73,13 +82,20 @@ class Game2048Env:
                             new_state[i, j] = new_state[i, k]
                             new_state[i, k] = 0
                             break
-
-                for k in range(j+1, width):
-                    if new_state[i, k] != 0 and new_state[i, k] == new_state[i, j]:
-                        new_state[i, j] <<= 1
-                        new_state[i, k] = 0
-                        reward += new_state[i, j]
-                        break
+            #merge part
+            for j in range(width-1):
+                if new_state[i, j] == 0:continue
+                if  new_state[i, j] == new_state[i, j+1]:
+                    new_state[i, j] <<= 1
+                    new_state[i, j+1] = 0
+                    reward += new_state[i, j]
+            for j in range(width):
+                if new_state[i, j] == 0:
+                    for k in range(j+1, width):
+                        if new_state[i, k] != 0:
+                            new_state[i, j] = new_state[i, k]
+                            new_state[i, k] = 0
+                            break
         return new_state, reward
     
     @staticmethod
@@ -95,13 +111,20 @@ class Game2048Env:
                             new_state[i, j] = new_state[k, j]
                             new_state[k, j] = 0
                             break
-
-                for k in range(i+1, height):
-                    if new_state[k, j] != 0 and new_state[k, j] == new_state[i, j]:
-                        new_state[i, j] <<= 1
-                        new_state[k, j] = 0
-                        reward += new_state[i, j]
-                        break
+            #merge part
+            for i in range(height-1):
+                if new_state[i, j] == 0:continue
+                if  new_state[i, j] == new_state[i+1, j]:
+                    new_state[i, j] <<= 1
+                    new_state[i+1, j] = 0
+                    reward += new_state[i, j]
+            for i in range(height):
+                if new_state[i, j] == 0:
+                    for k in range(i+1, height):
+                        if new_state[k, j] != 0:
+                            new_state[i, j] = new_state[k, j]
+                            new_state[k, j] = 0
+                            break
         return new_state, reward
 
     @staticmethod
@@ -117,13 +140,20 @@ class Game2048Env:
                             new_state[i, j] = new_state[k, j]
                             new_state[k, j] = 0
                             break
-
-                for k in range(i - 1, -1, -1):
-                    if new_state[k, j] != 0 and new_state[k, j] == new_state[i, j]:
-                        new_state[i, j] <<= 1
-                        new_state[k, j] = 0
-                        reward += new_state[i, j]
-                        break
+            #merge part
+            for i in range(height-1, 0, -1):
+                if new_state[i, j] == 0:continue
+                if  new_state[i, j] == new_state[i-1, j]:
+                    new_state[i, j] <<= 1
+                    new_state[i-1, j] = 0
+                    reward += new_state[i, j]
+            for i in range(height - 1, -1, -1):
+                if new_state[i, j] == 0:
+                    for k in range(i - 1, -1, -1):
+                        if new_state[k, j] != 0:
+                            new_state[i, j] = new_state[k, j]
+                            new_state[k, j] = 0
+                            break
         return new_state, reward
 
     @staticmethod
