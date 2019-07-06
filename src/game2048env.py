@@ -17,6 +17,8 @@ class Game2048Env:
             self.state = np.zeros((4, 4), dtype=np.int)
             for i in range(2):
                 self.add_random_tile()
+        
+        return self.state
 
     def get_available_tiles(self):
         tiles = []
@@ -158,6 +160,7 @@ class Game2048Env:
 
     def step(self, action):
         reward = 0
+        info = {}
         if self.turn == 'MOVE':
             self.state, reward = self.do_action(self.state, action)
             self.score += reward
@@ -167,11 +170,15 @@ class Game2048Env:
             self.add_tile(n, *tile)
             self.turn = 'MOVE'
         done = self.is_terminal()
-        return self.state, done, reward, self.score
+        info['score'] = self.score
+        return self.state, done, reward, info
 
     def reset(self):
         self.init()
         return self.state
     
     def render(self):
-        return None
+        print('--------------------------------')
+        print('score:', self.score)
+        print(self.state)
+        print('--------------------------------')
