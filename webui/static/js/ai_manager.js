@@ -4,6 +4,8 @@ var sleep = async (duration) => {
     });
 };
 
+var stopAuto = true;
+
 function AIManager() {
     this.events = {};
     this.listen();
@@ -69,9 +71,20 @@ function AIManager() {
   AIManager.prototype.autoplay = async function (event) {
     event.preventDefault();
     var self = this;
+    stopAuto = !stopAuto;
+    if (stopAuto) 
+        document.querySelector(".autoplay-button").innerHTML = "Auto Play";
+    else
+        document.querySelector(".autoplay-button").innerHTML = "Stop";
+    if (stopAuto) return; 
     while(!game.isGameTerminated()) {
+        if (stopAuto) break;
         self.nextstep(event);
         await sleep(100);
+    }
+    if (!stopAuto) {
+      stopAuto = !stopAuto;
+      document.querySelector(".autoplay-button").innerHTML = "Auto Play";
     }
   };
   
