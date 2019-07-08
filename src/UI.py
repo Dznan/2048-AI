@@ -2,10 +2,12 @@ import random
 import sys
 import pygame
 from pygame.locals import *
- 
+
+
 PIXEL = 150
 SCORE_PIXEL = 100
 SIZE = 4
+
 
 # 更新屏幕
 def show(game, screen, block, map_font, score_font, score_block):

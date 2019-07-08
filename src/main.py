@@ -5,16 +5,11 @@ from game2048env import Game2048Env
 import pygame
 from pygame.locals import *
 import time
-demo_state = np.array([
-    [2, 2, 4, 0],
-    [2, 2, 4, 0],
-    [2, 2, 4, 0],
-    [2, 2, 4, 0]
-])
+
 
 def main(argv):
     env = Game2048Env()
-    env.init(state=demo_state)
+    env.init()
     
     pygame.init()
     screen = pygame.display.set_mode((PIXEL * SIZE, PIXEL * SIZE + SCORE_PIXEL))
@@ -41,7 +36,7 @@ def main(argv):
             print('Actions:')
             for i, a in enumerate(actions):
                 print('{}: {}'.format(i, a))
-            pick = random.randint(0, len(actions)-1)#int(input('Input action id: '))
+            pick = np.random.randint(0, len(actions)-1)#int(input('Input action id: '))
         else:
             pick = np.random.randint(len(actions))
         state, done, reward, info = env.step(actions[pick])

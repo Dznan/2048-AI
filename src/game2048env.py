@@ -166,6 +166,16 @@ class Game2048Env:
             return Game2048Env.do_up_action(state)
         if direction == 'DOWN':
             return Game2048Env.do_down_action(state)
+    
+    @property
+    def successors(self):
+        envs = []
+        actions = self.action_space
+        for action in actions:
+            env = deepcopy(self)
+            env.step(action)
+            envs.append(env)
+        return envs
 
     @property
     def action_space(self):
