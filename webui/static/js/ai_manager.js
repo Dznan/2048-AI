@@ -60,9 +60,9 @@ function AIManager() {
     .then(res => {
         let actionList = {
             "U" : 0,
-            "L" : 1,
+            "R" : 1,
             "D" : 2,
-            "R" : 3
+            "L" : 3
         };
         self.emit("move", actionList[res.action]);
     });
