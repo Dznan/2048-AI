@@ -7,9 +7,18 @@ from pygame.locals import *
 import time
 
 
+demo_state = np.array([
+    [2, 0, 0, 0],
+    [2, 0, 0, 0],
+    [2, 0, 0, 0],
+    [2, 0, 0, 0]
+])
+
+
 def main(argv):
-    env = Game2048Env()
-    env.init()
+    env = Game2048Env(init_state=demo_state)
+    print(env.action_space)
+    # env.init()
     
     pygame.init()
     screen = pygame.display.set_mode((PIXEL * SIZE, PIXEL * SIZE + SCORE_PIXEL))

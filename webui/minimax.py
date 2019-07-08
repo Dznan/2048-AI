@@ -12,7 +12,10 @@ class MiniMaxPlayer:
             return None, self.eval_func(environment.state)
 
         min_action, min_value = None, 1e9
-        for action in environment.action_space:
+        actions = environment.action_space
+        environment.render()
+        print(environment.turn, actions)
+        for action in actions:
             child = environment.copy()
             child.step(action)
             _, value = self.maximize(child, depth+1)
@@ -26,7 +29,10 @@ class MiniMaxPlayer:
             return None, self.eval_func(environment.state)
         
         max_action, max_value = None, -1e9
-        for action in environment.action_space:
+        actions = environment.action_space
+        environment.render()
+        print(environment.turn, actions)
+        for action in actions:
             child = environment.copy()
             child.step(action)
             _, value = self.minimize(child, depth+1)
