@@ -13,8 +13,6 @@ class MiniMaxPlayer:
 
         min_action, min_value = None, 1e9
         actions = environment.action_space
-        environment.render()
-        print(environment.turn, actions)
         for action in actions:
             child = environment.copy()
             child.step(action)
@@ -30,8 +28,6 @@ class MiniMaxPlayer:
         
         max_action, max_value = None, -1e9
         actions = environment.action_space
-        environment.render()
-        print(environment.turn, actions)
         for action in actions:
             child = environment.copy()
             child.step(action)

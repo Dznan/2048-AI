@@ -13,7 +13,7 @@ from minimax import MiniMaxPlayer
 
 
 def eval_func(state):
-    return np.sum(state)
+    return np.sum(state) + len(state[state == 0]) * np.average(state)
 
 
 def ai_func(grid):
@@ -34,7 +34,7 @@ def ai_func(grid):
     player = MiniMaxPlayer(eval_func, max_depth=3)
 
     action = player.choose_action(env)
-    print(action, action_map[action])
+    print(action)
 
     # rndList = ["U", "L", "D", "R"]
     # random.shuffle(rndList)
