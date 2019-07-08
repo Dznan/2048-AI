@@ -4,6 +4,8 @@ var sleep = async (duration) => {
     });
 };
 
+var stopAuto = true;
+
 function AIManager() {
     this.events = {};
     this.listen();
@@ -58,9 +60,9 @@ function AIManager() {
     .then(res => {
         let actionList = {
             "U" : 0,
-            "L" : 1,
+            "R" : 1,
             "D" : 2,
-            "R" : 3
+            "L" : 3
         };
         self.emit("move", actionList[res.action]);
     });
@@ -69,9 +71,20 @@ function AIManager() {
   AIManager.prototype.autoplay = async function (event) {
     event.preventDefault();
     var self = this;
+    stopAuto = !stopAuto;
+    if (stopAuto) 
+        document.querySelector(".autoplay-button").innerHTML = "Auto Play";
+    else
+        document.querySelector(".autoplay-button").innerHTML = "Stop";
+    if (stopAuto) return; 
     while(!game.isGameTerminated()) {
+        if (stopAuto) break;
         self.nextstep(event);
         await sleep(100);
+    }
+    if (!stopAuto) {
+      stopAuto = !stopAuto;
+      document.querySelector(".autoplay-button").innerHTML = "Auto Play";
     }
   };
   
