@@ -36,7 +36,8 @@ def main(argv):
             print('Actions:')
             for i, a in enumerate(actions):
                 print('{}: {}'.format(i, a))
-            pick = np.random.randint(0, len(actions)-1)#int(input('Input action id: '))
+            pick = np.random.randint(0, len(actions)-1)
+            # pick = int(input('Input action id: '))
         else:
             pick = np.random.randint(len(actions))
         state, done, reward, info = env.step(actions[pick])
