@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 from flask import Flask, render_template, jsonify, request
+import sys
 import os
 import random
 import json
@@ -7,10 +8,12 @@ import json
 
 app = Flask(__name__)
 
+filepath = os.path.split(os.path.realpath(__file__))[0]
+sys.path.append(os.path.abspath(filepath + '/../'))
+# print(os.path.abspath(filepath + '/../'))
 
 import numpy as np
-from game2048env import Game2048Env
-from minimax import MiniMaxPlayer
+from game2048 import Game2048Env, MiniMaxPlayer
 
 
 def avg_dis(state):
