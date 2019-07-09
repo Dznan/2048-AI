@@ -1,12 +1,27 @@
 import numpy as np
+from numba import jit
+
+
+def select_actions(environment, actions, eval_func, num):
+    # np.random.shuffle(actions)
+    # return actions[:num]
+    actions_value = []
+    for action in actions:
+        child = environment.copy()
+        child.step(action)
+        actions_value.append((eval_func(child), action))
+    actions_value = sorted(actions_value, key=lambda x: x[0])
+    actions = []
+    for i in range(num):
+        actions.append(actions_value[i][1])
+    return actions
 
 
 class MiniMaxPlayer:
-    def __init__(self, eval_func, max_depth=20, max_child=None, prune_mini_step=False, prune_max_step=False):
+    def __init__(self, eval_func, max_depth=20, max_child=None):
         self.eval_func = eval_func
         self.max_depth = max_depth
         self.max_child = max_child
-        self.prune_mini_step = prune_mini_step
         self.NINF = -1e9
         self.INF = 1e9
     
@@ -21,30 +36,28 @@ class MiniMaxPlayer:
         min_action, min_value = None, 1e9
         actions = environment.action_space
 
-        if self.prune_mini_step:
-            for action in actions:
-                child = environment.copy()
-                child.step(action)
-                value = self.eval_func(child)
+        if self.max_child is not None and len(actions) > self.max_child:
+            # actions_value = []
+            # for action in actions:
+            #     child = environment.copy()
+            #     child.step(action)
+            #     actions_value.append((self.eval_func(child), action))
+            # actions_value = sorted(actions_value, key=lambda x: x[0])
+            # actions = []
+            # for i in range(self.max_child):
+            #     actions.append(actions_value[i][1])
+            actions = select_actions(environment, actions, self.eval_func, self.max_child)
 
-                if value < min_value:
-                    min_action, min_value = action, value
-            _, min_value = self.maximize(child, alpha, beta, depth+1)
-        else:  
-            if self.max_child is not None and len(actions) > self.max_child:
-                np.random.shuffle(actions)
-                actions = actions[:self.max_child]
-
-            for action in actions:
-                child = environment.copy()
-                child.step(action)
-                _, value = self.maximize(child, alpha, beta, depth+1)
-                if value < min_value:
-                    min_action, min_value = action, value
-                if min_value <= alpha:
-                    break
-                if min_value < beta:
-                    beta = min_value
+        for action in actions:
+            child = environment.copy()
+            child.step(action)
+            _, value = self.maximize(child, alpha, beta, depth+1)
+            if value < min_value:
+                min_action, min_value = action, value
+            if min_value <= alpha:
+                break
+            if min_value < beta:
+                beta = min_value
 
         return min_action, min_value
     
@@ -55,8 +68,15 @@ class MiniMaxPlayer:
         max_action, max_value = None, -1e9
         actions = environment.action_space
         if self.max_child is not None and len(actions) > self.max_child:
-            np.random.shuffle(actions)
-            actions = actions[:self.max_child]
+            actions_value = []
+            for action in actions:
+                child = environment.copy()
+                child.step(action)
+                actions_value.append((self.eval_func(child), action))
+            actions_value = sorted(actions_value, key=lambda x: x[0], reversed=True)
+            actions = []
+            for i in range(self.max_child):
+                actions.append(actions_value[i][1])
 
         for action in actions:
             child = environment.copy()

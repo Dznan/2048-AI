@@ -1,6 +1,8 @@
 import numpy as np
+from numba import jit
 
 
+@jit(nopython=True)
 def find_near_tile(state, x, y, d):
     if d == 0: # UP
         for i in range(x-1, -1, -1):
@@ -21,6 +23,7 @@ def find_near_tile(state, x, y, d):
     return 0
 
 
+@jit(nopython=True)
 def smoothness(state):
     s = 0.
     height, width = state.shape
@@ -33,6 +36,39 @@ def smoothness(state):
                 b = find_near_tile(state, i, j, d)
                 s -= np.abs(np.log2(a + 0.1) - np.log2(b + 0.1))
     return s
+
+
+@jit(nopython=True)
+def tonicity(state):
+    t = 0
+    a, b = 0, 0
+    height, width = state.shape
+    for i in range(height):
+        for j in range(width):
+            if state[i, j] == 0:
+                continue
+            c = state[i, j]
+            n = find_near_tile(state, i, j, 2) # RIGHT
+            if n != 0:
+                if c > n:
+                    a += np.log2(c + 0.1) - np.log2(n + 0.1)
+                if n > c:
+                    b += np.log2(n + 0.1) - np.log2(c + 0.1)
+    t += max(a, b)
+    a, b = 0, 0
+    for j in range(width):
+        for i in range(height):
+            if state[i, j] == 0:
+                continue
+            c = state[i, j]
+            n = find_near_tile(state, i, j, 1) # DOWN
+            if n != 0:
+                if c > n:
+                    a += np.log2(c + 0.1) - np.log2(n + 0.1)
+                if n > c:
+                    b += np.log2(n + 0.1) - np.log2(c + 0.1)
+    t += max(a, b)
+    return t
 
 
 def avg_dis(state):
@@ -88,12 +124,14 @@ def get_count(state):
     return res, c
 
 
+@jit
 def eval_func(env):
-    # max_tile = np.max(env.state)
+    max_tile = np.max(env.state)
     score = env.score
+    tonic = tonicity(env.state)
     smooth = smoothness(env.state)
     # tiles = len(env.state[env.state != 0])
-    # empty_tiles = len(env.state[env.state == 0])
+    empty_tiles = len(env.state[env.state == 0])
     # adis = avg_dis(env.state)
     # stat, c = get_count(env.state)
-    return score + smooth
+    return max_tile + 0.6 * smooth + tonic + 1.2 * np.log2(np.average(env.state)) * empty_tiles
