@@ -37,16 +37,15 @@ class MiniMaxPlayer:
         actions = environment.action_space
 
         if self.max_child is not None and len(actions) > self.max_child:
-            # actions_value = []
-            # for action in actions:
-            #     child = environment.copy()
-            #     child.step(action)
-            #     actions_value.append((self.eval_func(child), action))
-            # actions_value = sorted(actions_value, key=lambda x: x[0])
-            # actions = []
-            # for i in range(self.max_child):
-            #     actions.append(actions_value[i][1])
-            actions = select_actions(environment, actions, self.eval_func, self.max_child)
+            actions_value = []
+            for action in actions:
+                child = environment.copy()
+                child.step(action)
+                actions_value.append((self.eval_func(child), action))
+            actions_value = sorted(actions_value, key=lambda x: x[0])
+            actions = []
+            for i in range(self.max_child):
+                actions.append(actions_value[i][1])
 
         for action in actions:
             child = environment.copy()
@@ -67,16 +66,16 @@ class MiniMaxPlayer:
         
         max_action, max_value = None, -1e9
         actions = environment.action_space
-        if self.max_child is not None and len(actions) > self.max_child:
-            actions_value = []
-            for action in actions:
-                child = environment.copy()
-                child.step(action)
-                actions_value.append((self.eval_func(child), action))
-            actions_value = sorted(actions_value, key=lambda x: x[0], reversed=True)
-            actions = []
-            for i in range(self.max_child):
-                actions.append(actions_value[i][1])
+        # if self.max_child is not None and len(actions) > self.max_child:
+        #     actions_value = []
+        #     for action in actions:
+        #         child = environment.copy()
+        #         child.step(action)
+        #         actions_value.append((self.eval_func(child), action))
+        #     actions_value = sorted(actions_value, key=lambda x: x[0], reversed=True)
+        #     actions = []
+        #     for i in range(self.max_child):
+        #         actions.append(actions_value[i][1])
 
         for action in actions:
             child = environment.copy()

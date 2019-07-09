@@ -54,7 +54,8 @@ def tonicity(state):
                     a += np.log2(c + 0.1) - np.log2(n + 0.1)
                 if n > c:
                     b += np.log2(n + 0.1) - np.log2(c + 0.1)
-    t += max(a, b)
+    # t += max(a, b)
+    t += np.abs(a - b)
     a, b = 0, 0
     for j in range(width):
         for i in range(height):
@@ -67,7 +68,9 @@ def tonicity(state):
                     a += np.log2(c + 0.1) - np.log2(n + 0.1)
                 if n > c:
                     b += np.log2(n + 0.1) - np.log2(c + 0.1)
-    t += max(a, b)
+    # t += max(a, b)
+    t += np.abs(a - b)
+
     return t
 
 
@@ -124,14 +127,23 @@ def get_count(state):
     return res, c
 
 
-@jit
+# @jit
 def eval_func(env):
     max_tile = np.max(env.state)
-    score = env.score
+    # score = env.score
     tonic = tonicity(env.state)
     smooth = smoothness(env.state)
     # tiles = len(env.state[env.state != 0])
     empty_tiles = len(env.state[env.state == 0])
     # adis = avg_dis(env.state)
     # stat, c = get_count(env.state)
-    return max_tile + 0.6 * smooth + tonic + 1.2 * np.log2(np.average(env.state)) * empty_tiles
+    # return max_tile + smooth + tonic + 2.7 * np.average(env.state)
+    s = np.abs(max_tile) + np.abs(tonic) + np.abs(smooth) + np.abs(empty_tiles)
+    # with open('output.csv', 'a') as f:
+    #     f.write('{}, {}, {}, {}\n'.format(
+    #         round(np.abs(max_tile/s), 2),
+    #         round(np.abs(tonic/s), 2),
+    #         round(np.abs(smooth/s), 2),
+    #         round(np.abs(empty_tiles/s), 2)
+    #     ))
+    return max_tile + 0.6 * smooth + 8.0 * tonic + empty_tiles * np.average(env.state)
