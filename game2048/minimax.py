@@ -7,7 +7,6 @@ class MiniMaxPlayer:
         self.max_depth = max_depth
         self.max_child = max_child
         self.prune_mini_step = prune_mini_step
-        self.prune_max_step = prune_max_step
         self.NINF = -1e9
         self.INF = 1e9
     
@@ -30,6 +29,7 @@ class MiniMaxPlayer:
 
                 if value < min_value:
                     min_action, min_value = action, value
+            _, min_value = self.maximize(child, alpha, beta, depth+1)
         else:  
             if self.max_child is not None and len(actions) > self.max_child:
                 np.random.shuffle(actions)
@@ -54,28 +54,19 @@ class MiniMaxPlayer:
         
         max_action, max_value = None, -1e9
         actions = environment.action_space
-        if self.prune_max_step:
-            for action in actions:
-                child = environment.copy()
-                child.step(action)
-                value = self.eval_func(child)
+        if self.max_child is not None and len(actions) > self.max_child:
+            np.random.shuffle(actions)
+            actions = actions[:self.max_child]
 
-                if value > max_value:
-                    max_action, max_value = action, value
-        else:
-            if self.max_child is not None and len(actions) > self.max_child:
-                np.random.shuffle(actions)
-                actions = actions[:self.max_child]
-
-            for action in actions:
-                child = environment.copy()
-                child.step(action)
-                _, value = self.minimize(child, alpha, beta, depth+1)
-                if value > max_value:
-                    max_action, max_value = action, value
-                if max_value >= beta:
-                    break
-                if max_value > alpha:
-                    alpha = max_value
+        for action in actions:
+            child = environment.copy()
+            child.step(action)
+            _, value = self.minimize(child, alpha, beta, depth+1)
+            if value > max_value:
+                max_action, max_value = action, value
+            if max_value >= beta:
+                break
+            if max_value > alpha:
+                alpha = max_value
             
         return max_action, max_value
