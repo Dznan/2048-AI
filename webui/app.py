@@ -13,7 +13,8 @@ sys.path.append(os.path.abspath(filepath + '/../'))
 # print(os.path.abspath(filepath + '/../'))
 
 import numpy as np
-from game2048 import Game2048Env, MiniMaxPlayer
+import dqnfin.eval_func
+from dqnfin import dqn_test
 
 
 def avg_dis(state):
@@ -79,10 +80,10 @@ def eval_func(env):
 
 
 action_map = {
-    'DOWN': 'D',
-    'LEFT': 'L',
-    'UP': 'U',
-    'RIGHT': 'R',
+    0: 'U',
+    1: 'R',
+    2: 'D',
+    3: 'L',
 }
 
 
@@ -94,11 +95,8 @@ def ai_func(grid):
     返回:
         0 移动方向(U L D R)
     """
-
-    env = Game2048Env(init_state=np.array(grid))
-    player = MiniMaxPlayer(eval_func, max_depth=7, max_child=4)
-
-    action = player.choose_action(env)
+    
+    action = dqn_test.predict(np.array(grid))
     print(action, get_count(np.array(grid)))
 
     return action_map[action]
