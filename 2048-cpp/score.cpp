@@ -84,12 +84,20 @@ int tonicity(game2048& env){
 }
 
 double heuristic_evaluation_function(game2048 &env){
-	double s[4][4] = {
+	/*double s[4][4] = {
 		{4096, 2048, 1024, 512},
 		{32, 64, 128, 256},
 		{16, 8, 4, 2},
 		{2, 2, 2, 2}
+	};*/
+
+	double s[4][4] = {
+		{ 131072, 65536, 32768, 16384 },
+		{ 1024, 2048, 4096, 8192 },
+		{ 512, 256, 128, 64 },
+		{ 4, 8, 16, 32 }
 	};
+
 	double score = 0;
 	int max_tile = 0, empty_tiles = 0;
 	for(int i = 0; i < 4; ++i){
@@ -99,6 +107,7 @@ double heuristic_evaluation_function(game2048 &env){
 				empty_tiles++;
 		}
 	}
+	return score;
 	return 512 * empty_tiles + score;
 }
 

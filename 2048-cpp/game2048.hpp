@@ -41,7 +41,7 @@ public:
 		printf("---------------------------------\n");
 		for(int i = 0; i < 4; ++i){
 			for(int j = 0; j < 4; ++j)
-				printf("%6d", (board[i][j]));
+				printf("%6d", (board[i][j]?(1<<board[i][j]):0));
 			printf("\n");
 		}
 	}
