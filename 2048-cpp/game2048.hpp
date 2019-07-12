@@ -283,7 +283,25 @@ public:
 		return action_space() == 0;
 	}	
 	
+	int empty_tiles() {
+		int res = 0;
+		for (int i = 0; i < 4; ++i) {
+			for (int j = 0; j < 4; ++j)
+				if (board[i][j] == 0) res++;
+		}
+		return res;
+	}
 	
+	int max_tile() {
+		int res = 0;
+		for (int i = 0; i < 4; ++i) {
+			for (int j = 0; j < 4; ++j)
+				if (res < board[i][j])
+					res = board[i][j];
+		}
+		return res;
+	}
+
 }; 
 
 #endif

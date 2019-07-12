@@ -2,7 +2,7 @@
 #include "minimax.hpp"
 int main(){
 	srand(time(0));
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 1; i <= 100; ++i) {
 		game2048 env;
 		//env.print();
 		bool MOVE = true;
@@ -27,8 +27,7 @@ int main(){
 
 			MOVE = !MOVE;
 		}
-		env.print();
+		printf("times : %d   max_tile : %d\n", i, env.max_tile());
 	}
-	
 	return 0;
 }

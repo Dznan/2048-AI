@@ -85,7 +85,7 @@ int tonicity(game2048& env){
 
 double heuristic_evaluation_function(game2048 &env){
 	double s[4][4] = {
-		{4096*2, 2048, 1024, 512},
+		{4096, 2048, 1024, 512},
 		{32, 64, 128, 256},
 		{16, 8, 4, 2},
 		{2, 2, 2, 2}
