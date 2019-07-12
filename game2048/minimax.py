@@ -19,10 +19,11 @@ def select_actions(environment, actions, eval_func, num):
 
 
 class MiniMaxPlayer:
-    def __init__(self, eval_func, max_depth=20, max_child=None):
+    def __init__(self, eval_func, max_depth=20, max_child=None, random_select=True):
         self.eval_func = eval_func
         self.max_depth = max_depth
         self.max_child = max_child
+        self.random_select = True
         self.NINF = -1e9
         self.INF = 1e9
 
@@ -39,21 +40,25 @@ class MiniMaxPlayer:
         self.__count += 1
         if depth >= self.max_depth or environment.is_terminal():
             return None, self.eval_func(environment)
-                
+
         min_action, min_value = None, 1e9
         actions = environment.action_space
         succs = environment.successors
 
         if self.max_child is not None and len(succs) > self.max_child:
-            eval_value = []
-            for i, (child, action) in enumerate(succs):
-                eval_value.append((self.eval_func(child), i))
-            eval_value = sorted(eval_value, key=lambda x: x[0])
-            sub_succs = []
-            for i in range(self.max_child):
-                idx = eval_value[i][1]
-                sub_succs.append(succs[idx])
-            succs = sub_succs
+            if self.random_select:
+                np.random.shuffle(succs)
+                succs = succs[:self.max_child]
+            else:
+                eval_value = []
+                for i, (child, action) in enumerate(succs):
+                    eval_value.append((self.eval_func(child), i))
+                eval_value = sorted(eval_value, key=lambda x: x[0])
+                sub_succs = []
+                for i in range(self.max_child):
+                    idx = eval_value[i][1]
+                    sub_succs.append(succs[idx])
+                succs = sub_succs
         
         for child, action in succs:
             _, value = self.maximize(child, alpha, beta, depth+1)

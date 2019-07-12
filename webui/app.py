@@ -8,6 +8,10 @@ import json
 
 app = Flask(__name__)
 
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 filepath = os.path.split(os.path.realpath(__file__))[0]
 sys.path.append(os.path.abspath(filepath + '/../'))
 
@@ -33,13 +37,14 @@ def ai_func(grid):
     """
 
     env = Game2048Env(init_state=np.array(grid))
-    player = MiniMaxPlayer(eval_func, max_depth=9, max_child=2)
+    player = MiniMaxPlayer(eval_func, max_depth=7, max_child=4)
 
     action = player.choose_action(env)
-    print(action)
+    env.step(action)
+    print(action, eval_func(env))
 
     return action_map[action]
-    
+
 
 @app.route("/")
 def indexPage():
