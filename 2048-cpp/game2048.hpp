@@ -185,15 +185,16 @@ public:
 			for(int i = 0; i < 4; i++){
 				tile_type t = board[i][j];
 				if(t){
-					if(emp || t == top){
+					if(emp || (t == top)){
 						return true;
 					}
 					else{
 						top = t;
 					}
 				}
-				else
+				else {
 					emp = true;
+				}
 			}
 		}
 		return false;
@@ -206,15 +207,16 @@ public:
 			for(int i = 3; i > -1; i--){
 				tile_type t = board[i][j];
 				if(t){
-					if(emp || t == top){
+					if(emp || (t == top)){
 						return true;
 					}
 					else{
 						top = t;
 					}
 				}
-				else
+				else {
 					emp = true;
+				}
 			}
 		}
 		return false;
@@ -227,15 +229,16 @@ public:
 			for(int j = 0; j < 4; j++){
 				tile_type t = board[i][j];
 				if(t){
-					if(emp || t == top){
+					if(emp || (t == top)){
 						return true;
 					}
 					else{
 						top = t;
 					}
 				}
-				else
+				else {
 					emp = true;
+				}
 			}
 		}
 		return false;
@@ -248,15 +251,16 @@ public:
 			for(int j = 3; j > -1; j--){
 				tile_type t = board[i][j];
 				if(t){
-					if(emp || t == top){
+					if(emp || (t == top)){
 						return true;
 					}
 					else{
 						top = t;
 					}
 				}
-				else
+				else {
 					emp = true;
+				}
 			}
 		}
 		return false;

@@ -16,7 +16,7 @@ double myMax(game2048 &env, int search_deepth, double alpha, double beta, int& d
 					dir = i; 
 				}
 			}
-			if (f && score == now_alpha && rand() % 2)
+			if (f && (score == now_alpha) && (rand() % 2))
 				dir = i;
 			if(score >= beta) return score;
 		}	
@@ -25,8 +25,7 @@ double myMax(game2048 &env, int search_deepth, double alpha, double beta, int& d
 }
 
 double myMin(game2048 &env, int search_deepth, double alpha, double beta, int& dir){
-	if(env.is_terminal()) return 0;
-	if(search_deepth < 0) return heuristic_evaluation_function(env);
+	if(search_deepth < 0 || env.is_terminal()) return heuristic_evaluation_function(env);
 	double score, now_beta = MYMAX;
 	for(int i = 0; i < 4; ++i){
 		for(int j = 0; j < 4; ++j){
