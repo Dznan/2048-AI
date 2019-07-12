@@ -1,12 +1,5 @@
-#include "game2048.cpp"
-#include "score.cpp"
-#ifndef MINIMAX
-#define MINIMAX 
-#define MYMAX 1e10
+#include "minimax.hpp"
 
-const int my_search_deepth = 9;
-
-double myMin(game2048 &env, int search_deepth, double alpha, double beta, int& dir);
 double myMax(game2048 &env, int search_deepth, double alpha, double beta, int& dir){
 	if(search_deepth < 0) return heuristic_evaluation_function(env);
 	double now_alpha = -MYMAX, score;
@@ -15,13 +8,16 @@ double myMax(game2048 &env, int search_deepth, double alpha, double beta, int& d
 		if(action & (1 << i)){
 			game2048 tmp = env;
 			tmp.move(i);
+			bool f = (search_deepth == my_search_deepth);
 			score = myMin(tmp, search_deepth - 1, max(alpha, now_alpha), beta, dir);
-			if(score >= now_alpha){
+			if(score > now_alpha){
 				now_alpha = score;
-				if(search_deepth == my_search_deepth){
+				if(f){
 					dir = i; 
 				}
 			}
+			if (f && score == now_alpha && rand() % 2)
+				dir = i;
 			if(score >= beta) return score;
 		}	
 	}
@@ -58,9 +54,8 @@ double myMin(game2048 &env, int search_deepth, double alpha, double beta, int& d
 	return now_beta;
 }
 
-int myFind(game2048& env){
+int myFind(game2048 env){
 	int res;
 	myMax(env, my_search_deepth, INT_MIN, INT_MAX, res);
 	return res;
 }
-#endif

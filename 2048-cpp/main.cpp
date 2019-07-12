@@ -1,5 +1,5 @@
-#include "game2048.cpp"
-#include "minimax.cpp"
+#include "game2048.hpp"
+#include "minimax.hpp"
 int main(){
 	srand(time(0));
 	game2048 env;
