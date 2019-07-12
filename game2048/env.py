@@ -19,8 +19,9 @@ def do_right_action(state):
                         break
         #merge part
         for j in range(width-1, 0, -1):
-            if new_state[i, j] == 0:continue
-            if  new_state[i, j] == new_state[i, j-1]:
+            if new_state[i, j] == 0:
+                continue
+            if new_state[i, j] == new_state[i, j-1]:
                 new_state[i, j] <<= 1
                 new_state[i, j-1] = 0
                 reward += new_state[i, j]
@@ -50,8 +51,9 @@ def do_left_action(state):
                         break
         #merge part
         for j in range(width-1):
-            if new_state[i, j] == 0:continue
-            if  new_state[i, j] == new_state[i, j+1]:
+            if new_state[i, j] == 0:
+                continue
+            if new_state[i, j] == new_state[i, j+1]:
                 new_state[i, j] <<= 1
                 new_state[i, j+1] = 0
                 reward += new_state[i, j]
@@ -80,8 +82,9 @@ def do_up_action(state):
                         break
         #merge part
         for i in range(height-1):
-            if new_state[i, j] == 0:continue
-            if  new_state[i, j] == new_state[i+1, j]:
+            if new_state[i, j] == 0:
+                continue
+            if new_state[i, j] == new_state[i+1, j]:
                 new_state[i, j] <<= 1
                 new_state[i+1, j] = 0
                 reward += new_state[i, j]
@@ -110,8 +113,9 @@ def do_down_action(state):
                         break
         #merge part
         for i in range(height-1, 0, -1):
-            if new_state[i, j] == 0:continue
-            if  new_state[i, j] == new_state[i-1, j]:
+            if new_state[i, j] == 0:
+                continue
+            if new_state[i, j] == new_state[i-1, j]:
                 new_state[i, j] <<= 1
                 new_state[i-1, j] = 0
                 reward += new_state[i, j]
