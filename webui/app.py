@@ -33,7 +33,7 @@ def ai_func(grid):
     """
 
     env = Game2048Env(init_state=np.array(grid))
-    player = MiniMaxPlayer(eval_func, max_depth=7, max_child=2)
+    player = MiniMaxPlayer(eval_func, max_depth=9, max_child=2)
 
     action = player.choose_action(env)
     print(action)

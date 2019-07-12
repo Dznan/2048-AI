@@ -142,7 +142,10 @@ class Game2048Env:
         self.score = 0
         self.state = init_state
         self.turn = 'MOVE'
-    
+        self.cache = {
+            'next_state': {}
+        }
+
     def init(self, state=np.array([], dtype=np.int32)):
         self.score = 0
         self.turn = 'MOVE'
@@ -178,22 +181,26 @@ class Game2048Env:
 
     @property
     def successors(self):
-        envs = []
+        succs = []
         actions = self.action_space
         for action in actions:
             env = deepcopy(self)
             env.step(action)
-            envs.append(env)
-        return envs
+            succs.append((env, action))
+        return succs
 
     @property
     def action_space(self):
         actions = []
         if self.turn == 'MOVE':
-            for d in ['RIGHT', 'LEFT', 'UP', 'DOWN']:
-                new_state, _ = do_action(self.state, d)
-                if np.any(new_state != self.state):
-                    actions.append(d)
+            for action in ['RIGHT', 'LEFT', 'UP', 'DOWN']:
+                if action in self.cache['next_state'] and np.any(self.cache['next_state'][action][0] != self.state):
+                    actions.append(action)
+                else:
+                    new_state, reward = do_action(self.state, action)
+                    self.cache['next_state'][action] = new_state, reward
+                    if np.any(new_state != self.state):
+                        actions.append(action)
         elif self.turn == 'ADD_TILE':
             tiles = self.get_available_tiles()
             for tile in tiles:
@@ -211,7 +218,11 @@ class Game2048Env:
         reward = 0
         info = {}
         if self.turn == 'MOVE':
-            self.state, reward = do_action(self.state, action)
+            if action in self.cache['next_state']:
+                self.state, reward = self.cache['next_state'][action]
+                self.cache['next_state'] = {}
+            else:
+                self.state, reward = do_action(self.state, action)
             self.score += reward
             self.turn = 'ADD_TILE'
         elif self.turn == 'ADD_TILE':

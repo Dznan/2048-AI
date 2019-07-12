@@ -127,7 +127,7 @@ def get_count(state):
     return res, c
 
 
-# @jit
+@jit
 def eval_func(env):
     max_tile = np.max(env.state)
     # score = env.score
@@ -138,7 +138,7 @@ def eval_func(env):
     # adis = avg_dis(env.state)
     # stat, c = get_count(env.state)
     # return max_tile + smooth + tonic + 2.7 * np.average(env.state)
-    s = np.abs(max_tile) + np.abs(tonic) + np.abs(smooth) + np.abs(empty_tiles)
+    # s = np.abs(max_tile) + np.abs(tonic) + np.abs(smooth) + np.abs(empty_tiles)
     # with open('output.csv', 'a') as f:
     #     f.write('{}, {}, {}, {}\n'.format(
     #         round(np.abs(max_tile/s), 2),
@@ -146,4 +146,4 @@ def eval_func(env):
     #         round(np.abs(smooth/s), 2),
     #         round(np.abs(empty_tiles/s), 2)
     #     ))
-    return max_tile + 0.6 * smooth + 8.0 * tonic + empty_tiles * np.average(env.state)
+    return np.log2(max_tile) + 0.6 * smooth + 8.0 * tonic + empty_tiles * np.average(env.state)
