@@ -1,6 +1,5 @@
-#include "game2048.cpp"
-#ifndef SCORE
-#define SCORE
+#include "score.hpp"
+
 int find_near_tile(game2048 &env, int x, int y, int d){
     if (d == 0){	//up
     	for(int i = x - 1; i > -1; i--){
@@ -83,6 +82,13 @@ int tonicity(game2048& env){
 	return t; 
 }
 
+double s[4][4] = {
+	{ 104857.6*16, 26214.4*16, 6553.6*16, 1638.4*16},
+	{ 6.4*16, 25.6*16, 102.4*16, 409.6*16 },
+	{ 25.6, 12.8, 6.4, 3.2 },
+	{ .2, .4, .8, 1.6 }
+};
+
 double heuristic_evaluation_function(game2048 &env){
 	/*double s[4][4] = {
 		{4096, 2048, 1024, 512},
@@ -90,25 +96,12 @@ double heuristic_evaluation_function(game2048 &env){
 		{16, 8, 4, 2},
 		{2, 2, 2, 2}
 	};*/
-
-	double s[4][4] = {
-		{ 131072, 65536, 32768, 16384 },
-		{ 1024, 2048, 4096, 8192 },
-		{ 512, 256, 128, 64 },
-		{ 4, 8, 16, 32 }
-	};
-
 	double score = 0;
-	int max_tile = 0, empty_tiles = 0;
 	for(int i = 0; i < 4; ++i){
 		for(int j = 0; j < 4; ++j){
 			score += s[i][j] * env.board[i][j];
-			if(env.board[i][j] == 0)
-				empty_tiles++;
 		}
 	}
 	return score;
-	return 512 * empty_tiles + score;
 }
 
-#endif

@@ -10,9 +10,7 @@ public:
 	typedef unsigned char tile_type;
 	
 	tile_type board[4][4];
-	
-	int score;
-	
+
 	
 public:
 	
@@ -21,13 +19,11 @@ public:
 	} 
 	
 	game2048(const game2048 &o){
-		score = o.score;
 		for(int i = 0; i < 16; ++i)
 			board[i/4][i%4] = o.board[i/4][i%4];
 	}
 	
 	game2048& operator=(const game2048 &o){
-		score = o.score;
 		for(int i = 0; i < 16; ++i)
 			board[i/4][i%4] = o.board[i/4][i%4];
 		return *this;
@@ -58,7 +54,6 @@ public:
 	}
 	
 	void init(){
-		score = 0;
 		for(int i = 0; i < 16; ++i){
 			board[i/4][i%4] = 0;
 		}
